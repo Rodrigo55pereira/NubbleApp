@@ -5,13 +5,13 @@ import {Text} from './src/components/Text/Text';
 function App(): React.JSX.Element {
   return (
     <SafeAreaView>
-      <Text preset="headingLarge" style={{color: 'red'}}>
+      <Text preset="headingLarge">
         Coffstack
       </Text>
-      <Text preset="headingLarge" style={{fontFamily: 'Panchang-Light'}}>
+      <Text preset="headingLarge">
         Coffstack
       </Text>      
-      <Text preset="headingLarge" style={{fontFamily: 'Satoshi-Black'}}>
+      <Text preset="paragraphMedium">
         Coffstack
       </Text>    
     </SafeAreaView>

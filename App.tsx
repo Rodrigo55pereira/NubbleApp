@@ -1,19 +1,15 @@
 import React from 'react';
-import {SafeAreaView, StyleSheet} from 'react-native';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {Text} from './src/components/Text/Text';
+import {Button} from './src/components/Button/Button';
 
 function App(): React.JSX.Element {
   return (
     <SafeAreaView>
-      <Text preset="headingLarge">
-        Coffstack
-      </Text>
-      <Text preset="headingLarge">
-        Coffstack
-      </Text>      
-      <Text preset="paragraphMedium">
-        Coffstack
-      </Text>    
+      <View style={{ paddingHorizontal: 24 }}>
+        <Text italic preset="headingLarge">Coffstack</Text>
+        <Button title="Entrar" />
+      </View>
     </SafeAreaView>
   );
 }

@@ -20,5 +20,27 @@ const pallete = {
 };
 
 export const theme = createTheme({
-  //colors: {},
+  colors: {
+    ...pallete,
+    primary: pallete.greenPrimary,
+    primaryContrast: pallete.grayWhite,
+
+    buttonPrimary: pallete.greenPrimary,
+    
+    background: pallete.grayWhite,
+    backgroundContranst: pallete.grayBlack,
+
+    error: pallete.redError,
+    errorLight: pallete.redErrorLight,
+
+    success: pallete.greenSuccess,
+    successLight: pallete.greenSuccessLight
+  },
+  spacing: {
+  },
+  borderRadii: {
+
+  }
 });
+
+export type Theme = typeof theme;

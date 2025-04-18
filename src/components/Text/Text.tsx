@@ -1,9 +1,9 @@
 import React from 'react';
-
 import {
   Text as RNText,
   TextProps as RNTextProps,
   TextStyle,
+  Platform, // ✅ Importado para detectar plataforma e aplicar estilo condicional
 } from 'react-native';
 
 interface TextProps extends RNTextProps {
@@ -23,15 +23,29 @@ export const Text = ({
   ...props
 }: TextProps) => {
   const fontFamily = getFontFamily(preset, bold, italic, semiBold);
+
+  // ✅ Adiciona `fontStyle: 'italic'` SOMENTE no iOS
+  // Isso é necessário pois mesmo usando a fonte itálica, o iOS às vezes não aplica o visual correto sem esse estilo extra
+  const conditionalItalic =
+  italic && Platform.OS === 'ios'
+    ? { fontStyle: 'italic' as TextStyle['fontStyle'] }
+    : {};
+
   return (
     <RNText
-      style={[$fontSizes[preset], {fontFamily: fontFamily}, style]}
+      style={[
+        $fontSizes[preset],
+        { fontFamily },        // ✅ Continua usando a fonte correta
+        conditionalItalic,     // ✅ Estilo condicional só no iOS
+        style,
+      ]}
       {...props}>
       {children}
     </RNText>
   );
 };
 
+// 🎯 Seleciona a família de fonte apropriada com base nos modificadores
 const getFontFamily = (
   preset: TextVariants,
   bold?: boolean,
@@ -43,47 +57,31 @@ const getFontFamily = (
     preset === 'headingMedium' ||
     preset === 'headingSmall'
   ) {
+    if (bold && italic) return $fontFamily.boldItalic;
     return italic ? $fontFamily.boldItalic : $fontFamily.bold;
   }
-  switch (true) {
-    case bold && italic:
-      return $fontFamily.boldItalic;
-    case bold:
-      return $fontFamily.bold;
-    case italic:
-      return $fontFamily.italic;
-    case semiBold && italic:
-      return $fontFamily.mediumItalic;
-    case semiBold:
-      return $fontFamily.medium;
-    default:
-      return $fontFamily.regular;
-  }
+
+  if (bold && italic) return $fontFamily.boldItalic;
+  if (semiBold && italic) return $fontFamily.mediumItalic;
+  if (bold) return $fontFamily.bold;
+  if (semiBold) return $fontFamily.medium;
+  if (italic) return $fontFamily.italic;
+  return $fontFamily.regular;
 };
 
-type TextVariants =
-  | 'headingLarge'
-  | 'headingMedium'
-  | 'headingSmall'
-  | 'paragraphLarge'
-  | 'paragraphMedium'
-  | 'paragraphSmall'
-  | 'paragraphCaption'
-  | 'paragraphCaptionSmall';
-
+// 🧱 Tamanhos de texto baseados no tipo
 const $fontSizes: Record<TextVariants, TextStyle> = {
-  headingLarge: {fontSize: 32, lineHeight: 38.4},
-  headingMedium: {fontSize: 22, lineHeight: 26.4},
-  headingSmall: {fontSize: 18, lineHeight: 23.4},
-
-  paragraphLarge: {fontSize: 18, lineHeight: 25.2},
-  paragraphMedium: {fontSize: 16, lineHeight: 22.4},
-  paragraphSmall: {fontSize: 14, lineHeight: 19.6},
-
-  paragraphCaption: {fontSize: 12, lineHeight: 16.8},
-  paragraphCaptionSmall: {fontSize: 10, lineHeight: 14},
+  headingLarge: { fontSize: 32, lineHeight: 38.4 },
+  headingMedium: { fontSize: 22, lineHeight: 26.4 },
+  headingSmall: { fontSize: 18, lineHeight: 23.4 },
+  paragraphLarge: { fontSize: 18, lineHeight: 25.2 },
+  paragraphMedium: { fontSize: 16, lineHeight: 22.4 },
+  paragraphSmall: { fontSize: 14, lineHeight: 19.6 },
+  paragraphCaption: { fontSize: 12, lineHeight: 16.8 },
+  paragraphCaptionSmall: { fontSize: 10, lineHeight: 14 },
 };
 
+// ✅ Certifique-se de que os nomes abaixo correspondem aos nomes internos (PostScript Name) das fontes
 const $fontFamily = {
   black: 'Satoshi-Black',
   blackItalic: 'Satoshi-BlackItalic',
@@ -96,3 +94,13 @@ const $fontFamily = {
   mediumItalic: 'Satoshi-MediumItalic',
   regular: 'Satoshi-Regular',
 };
+
+type TextVariants =
+  | 'headingLarge'
+  | 'headingMedium'
+  | 'headingSmall'
+  | 'paragraphLarge'
+  | 'paragraphMedium'
+  | 'paragraphSmall'
+  | 'paragraphCaption'
+  | 'paragraphCaptionSmall';

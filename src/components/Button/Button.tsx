@@ -1,28 +1,45 @@
-import {TouchableOpacity, View} from 'react-native';
+import {ActivityIndicator} from 'react-native';
+import {TouchableOpacityBox, TouchableOpacityBoxProps} from '../Box/Box';
 import {Text} from '../Text/Text';
-import { useTheme } from '@shopify/restyle'
-import { Theme } from '../../theme/theme'
-import { Box } from '../Box/Box'
+import {buttonPresets} from './buttonPresets';
 
-interface ButtonProps {
+// UI
+// preset: primary e outline
+// default, disabled
+
+export type ButtonPreset = 'primary' | 'outline' | 'secundary';
+
+interface ButtonProps extends TouchableOpacityBoxProps {
   title: string;
+  loading?: boolean;
+  preset?: ButtonPreset;
 }
 
-export const Button = ({title}: ButtonProps) => {
-  const { colors } = useTheme<Theme>();
+export const Button = ({
+  title,
+  loading,
+  preset='primary',
+  ...touchableOpacityBoxProps
+}: ButtonProps) => {
+
+  const buttonPreset = buttonPresets[preset];
+
   return (
-    <Box
-      backgroundColor='primary'
-      paddingHorizontal='s20'
-      // style={{
-      //   paddingHorizontal: 20,
-      //   paddingVertical: 14,
-      //   backgroundColor: colors.carrotSecondary,
-      //   alignItems: 'center',
-      //   borderRadius: 16,
-      // }}
-      >
-      <Text preset="paragraphMedium" bold style={{color: 'white'}}>{title}</Text>
-    </Box>
+    <TouchableOpacityBox
+      paddingHorizontal="s20"
+      height={50}
+      alignItems="center"
+      justifyContent="center"
+      borderRadius="s16"
+      {...buttonPreset.container}
+      {...touchableOpacityBoxProps}>
+      {loading ? (
+        <ActivityIndicator />
+      ) : (
+        <Text preset="paragraphMedium" bold color={buttonPreset.content}>
+          {title}
+        </Text>
+      )}
+    </TouchableOpacityBox>
   );
 };

@@ -1,12 +1,15 @@
-import React from 'react';
+import { createText } from '@shopify/restyle'
+import React from 'react'
 import {
-  Text as RNText,
-  TextProps as RNTextProps,
-  TextStyle,
-  Platform, // ✅ Importado para detectar plataforma e aplicar estilo condicional
-} from 'react-native';
+  Platform,
+  TextStyle
+} from 'react-native'
+import { Theme } from '../../theme/theme'
 
-interface TextProps extends RNTextProps {
+const SRText = createText<Theme>();
+type SRTextProps = React.ComponentProps<typeof SRText>;
+
+interface TextProps extends SRTextProps {
   preset?: TextVariants;
   bold?: boolean;
   italic?: boolean;
@@ -20,28 +23,29 @@ export const Text = ({
   italic,
   semiBold,
   style,
-  ...props
+  ...sRTextProps
 }: TextProps) => {
   const fontFamily = getFontFamily(preset, bold, italic, semiBold);
 
   // ✅ Adiciona `fontStyle: 'italic'` SOMENTE no iOS
   // Isso é necessário pois mesmo usando a fonte itálica, o iOS às vezes não aplica o visual correto sem esse estilo extra
   const conditionalItalic =
-  italic && Platform.OS === 'ios'
-    ? { fontStyle: 'italic' as TextStyle['fontStyle'] }
-    : {};
+    italic && Platform.OS === 'ios'
+      ? {fontStyle: 'italic' as TextStyle['fontStyle']}
+      : {};
 
   return (
-    <RNText
+    <SRText
+      color="backgroundContranst"
       style={[
         $fontSizes[preset],
-        { fontFamily },        // ✅ Continua usando a fonte correta
-        conditionalItalic,     // ✅ Estilo condicional só no iOS
+        {fontFamily}, // ✅ Continua usando a fonte correta
+        conditionalItalic, // ✅ Estilo condicional só no iOS
         style,
       ]}
-      {...props}>
+      {...sRTextProps}>
       {children}
-    </RNText>
+    </SRText>
   );
 };
 
@@ -71,14 +75,14 @@ const getFontFamily = (
 
 // 🧱 Tamanhos de texto baseados no tipo
 const $fontSizes: Record<TextVariants, TextStyle> = {
-  headingLarge: { fontSize: 32, lineHeight: 38.4 },
-  headingMedium: { fontSize: 22, lineHeight: 26.4 },
-  headingSmall: { fontSize: 18, lineHeight: 23.4 },
-  paragraphLarge: { fontSize: 18, lineHeight: 25.2 },
-  paragraphMedium: { fontSize: 16, lineHeight: 22.4 },
-  paragraphSmall: { fontSize: 14, lineHeight: 19.6 },
-  paragraphCaption: { fontSize: 12, lineHeight: 16.8 },
-  paragraphCaptionSmall: { fontSize: 10, lineHeight: 14 },
+  headingLarge: {fontSize: 32, lineHeight: 38.4},
+  headingMedium: {fontSize: 22, lineHeight: 26.4},
+  headingSmall: {fontSize: 18, lineHeight: 23.4},
+  paragraphLarge: {fontSize: 18, lineHeight: 25.2},
+  paragraphMedium: {fontSize: 16, lineHeight: 22.4},
+  paragraphSmall: {fontSize: 14, lineHeight: 19.6},
+  paragraphCaption: {fontSize: 12, lineHeight: 16.8},
+  paragraphCaptionSmall: {fontSize: 10, lineHeight: 14},
 };
 
 // ✅ Certifique-se de que os nomes abaixo correspondem aos nomes internos (PostScript Name) das fontes

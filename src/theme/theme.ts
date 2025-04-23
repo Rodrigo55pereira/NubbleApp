@@ -10,7 +10,7 @@ const pallete = {
   redError: '#EA3838',
   redErrorLight: '#FBECEC',
 
-  grayBlack: '#000000', 
+  grayBlack: '#000000',
   gray1: '#636363',
   gray2: '#8E8E8E',
   gray3: '#B3B3B3',
@@ -26,7 +26,7 @@ export const theme = createTheme({
     primaryContrast: pallete.grayWhite,
 
     buttonPrimary: pallete.greenPrimary,
-    
+
     background: pallete.grayWhite,
     backgroundContranst: pallete.grayBlack,
 
@@ -34,7 +34,7 @@ export const theme = createTheme({
     errorLight: pallete.redErrorLight,
 
     success: pallete.greenSuccess,
-    successLight: pallete.greenSuccessLight
+    successLight: pallete.greenSuccessLight,
   },
   spacing: {
     s4: 4,
@@ -51,8 +51,14 @@ export const theme = createTheme({
     s56: 56,
   },
   borderRadii: {
-
-  }
+    s8: 8,
+    s12: 12,
+    s16: 16,
+  },
+  textVariants: {
+    defaults: {},
+  },
 });
 
 export type Theme = typeof theme;
+export type ThemeColors = keyof Theme['colors'];

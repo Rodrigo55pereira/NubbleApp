@@ -1,8 +1,12 @@
-import React from 'react';
-import {SafeAreaView, StyleSheet, View, Text as TextAlterado } from 'react-native';
-import {Text} from './src/components/Text/Text';
-import {Button} from './src/components/Button/Button';
-import {ThemeProvider} from '@shopify/restyle';
+import { ThemeProvider } from '@shopify/restyle'
+import React from 'react'
+import {
+  SafeAreaView,
+  StyleSheet,
+  View
+} from 'react-native'
+import { Button } from './src/components/Button/Button'
+import { Text } from './src/components/Text/Text'
 import { theme } from './src/theme/theme'
 
 function App(): React.JSX.Element {
@@ -13,7 +17,13 @@ function App(): React.JSX.Element {
           <Text preset="headingLarge" italic>
             Coffstack
           </Text>
-          <Button title="Entrar" />
+          <Button
+            marginBottom="s24"
+            title="Entrar"
+          />
+          <Button preset="outline" title="Outline" marginBottom="s24"/>
+          <Button preset="secundary" title="Secondary" marginBottom="s24"/>
+          <Button loading title="Loading" />
         </View>
       </SafeAreaView>
     </ThemeProvider>
